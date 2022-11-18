@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>www.experianassessment.co.za</groupId>
+	<artifactId>Experian-Student-Backend</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Experian-Student-Backend</name>
+	<description>Backend project to intergrate with Front end </description>
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+
+
+		<!-- Camunda -->
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+			<version>7.18.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+			<version>7.18.0</version>
+		</dependency>
+
+		<!-- Camunda -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+
+
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Mockito -->
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+
+		<!-- Postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Postgresql -->
+
+		<!-- Validation -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.7</version>
+		</dependency>
+		<!-- Validation -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
