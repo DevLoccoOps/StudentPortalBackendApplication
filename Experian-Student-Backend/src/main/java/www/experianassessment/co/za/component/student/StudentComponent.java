@@ -120,6 +120,12 @@ public class StudentComponent implements CamundaComponentMessageHandler {
 				this.handleMessage(MessageTypeEnum.WARNING, executionId,
 						errorConfigFileHelper.getStandardizedWarningMessage(
 								StanderdizedWarningCodeEnum.SCORE_GREATER_THAN_100.variableName()));
+			} else if (studentInfo.getCurrentScore() < 0) {
+
+				this.handleMessage(MessageTypeEnum.WARNING, executionId,
+						errorConfigFileHelper.getStandardizedWarningMessage(
+								StanderdizedWarningCodeEnum.SCORE_GREATER_THAN_0.variableName()));
+
 			}
 
 		} catch (Exception e) {
@@ -159,14 +165,14 @@ public class StudentComponent implements CamundaComponentMessageHandler {
 	}
 
 	private void recordNewStudent(StudentInfo studentInfo, StudentInformation savedStudentInformation) {
-		if (savedStudentInformation != null) {
+	
 			StudentScoreRecordsInformation studentScoreRecordsInformation = new StudentScoreRecordsInformation();
 			studentScoreRecordsInformation.setStudentInformation(savedStudentInformation);
 			studentScoreRecordsInformation.setCurrentScore(studentInfo.getCurrentScore());
 			studentScoreRecordsInformation.setTimeStamp(new Date());
 			studentScoreRecordsInformationRepository.save(studentScoreRecordsInformation);
 
-		}
+		
 	}
 
 	public void calculateAverage(String executionId, String processInstanceId) {
@@ -215,6 +221,38 @@ public class StudentComponent implements CamundaComponentMessageHandler {
 				studentInformationRepository.save(studentInformation);
 
 				updateAverageScoreRecord(studentInformation);
+
+			} else {
+				this.handleMessage(MessageTypeEnum.WARNING, executionId,
+						errorConfigFileHelper.getStandardizedWarningMessage(
+								StanderdizedWarningCodeEnum.STUDENT_DOES_NOT_EXIST.variableName()));
+			}
+
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			this.handleMessage(MessageTypeEnum.ERROR, executionId, errorConfigFileHelper
+					.getStandardizedErrorMessage(StanderdizedErrorCodeEnum.UPDATE_SCORE_ERROR.variableName()));
+
+		}
+
+	}
+
+	public void captureLatestScores(String executionId, String processInstanceId) {
+
+		try {
+
+			StudentInfo studentInfo = (StudentInfo) runtimeService.getVariable(executionId,
+					StudentVariablesEnum.STUDENT_INFO.variableName());
+
+			Optional<StudentInformation> studentInformationOptional = studentInformationRepository
+					.findStudentByStudentNumber(studentInfo.getStudentNumber());
+			if (studentInformationOptional.isPresent()) {
+				StudentInformation studentInformation = studentInformationOptional.get();
+				studentInformation.setCurrentScore(studentInfo.getCurrentScore());
+				studentInformation.setAverageScore(studentInfo.getAverageScore());
+				studentInformationRepository.save(studentInformation);
+
+				captureAverageScoreRecord(studentInformation);
 
 			} else {
 				this.handleMessage(MessageTypeEnum.WARNING, executionId,
@@ -503,6 +541,19 @@ public class StudentComponent implements CamundaComponentMessageHandler {
 			studentScoreRecordsInformationRepository.save(studentScoreRecordsInformation);
 
 		}
+	}
+
+	private void captureAverageScoreRecord(StudentInformation studentInformation) {
+
+		StudentScoreRecordsInformation studentScoreRecordsInformation = new StudentScoreRecordsInformation();
+
+		studentScoreRecordsInformation.setStudentInformation(studentInformation);
+		studentScoreRecordsInformation.setCurrentScore(studentInformation.getCurrentScore());
+		studentScoreRecordsInformation.setAverageScore(studentInformation.getAverageScore());
+		studentScoreRecordsInformation.setTimeStamp(new Date());
+
+		studentScoreRecordsInformationRepository.save(studentScoreRecordsInformation);
+
 	}
 
 	private String generateStudentNumberField(String firstName, String lastName) {

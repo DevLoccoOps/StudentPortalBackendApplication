@@ -10,7 +10,7 @@ public enum ProcessVariablesEnum {
 	PROCESS_GET_STUDENTS_LIST_INFORMATION("process-get-students-info-list"), 
 	PROCESS_UPDATE_STUDENT_INFORMATION("process-update-student-info"), 
 	PROCESS_SEARCH_STUDENT_INFORMATION("process-search-student-info"), 
-	
+	PROCESS_CAPTURE_STUDENT_SCORE("process-capture-student-score"), 
 	/**
 	 * Process variables
 	 */

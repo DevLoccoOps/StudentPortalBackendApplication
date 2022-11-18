@@ -275,6 +275,63 @@ public class StudentWorkflowAPI {
 		return reply;
 
 	}
+	
+	@PostMapping("/captureScore")
+	public StudentReply captureScore(@RequestBody StudentRequest request) {
+		StudentReply reply = new StudentReply();
+		try {
+			Map<String, Object> variables = new HashMap<String, Object>();
+
+			identityService.setAuthenticatedUserId(request.getUsername());
+
+			variables.put(StudentVariablesEnum.STUDENT_INFO.variableName(), request.getStudentInfo());
+
+			ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(
+					ProcessVariablesEnum.PROCESS_CAPTURE_STUDENT_SCORE.variableName(), variables);
+
+			HistoricVariableInstance continueProcess = historyService.createHistoricVariableInstanceQuery()
+					.processInstanceId(processInstance.getProcessInstanceId())
+					.variableName(ProcessVariablesEnum.CONTINUE_PROCESS.variableName()).singleResult();
+
+			HistoricVariableInstance serviceSuccess = historyService.createHistoricVariableInstanceQuery()
+					.processInstanceId(processInstance.getProcessInstanceId())
+					.variableName(ProcessVariablesEnum.SERVICE_SUCCESS.variableName()).singleResult();
+
+			HistoricVariableInstance errorMessage = historyService.createHistoricVariableInstanceQuery()
+					.processInstanceId(processInstance.getProcessInstanceId())
+					.variableName(ProcessVariablesEnum.ERROR_MESSAGE.variableName()).singleResult();
+
+			HistoricVariableInstance warningMessage = historyService.createHistoricVariableInstanceQuery()
+					.processInstanceId(processInstance.getProcessInstanceId())
+					.variableName(ProcessVariablesEnum.WARNING_MESSAGE.variableName()).singleResult();
+
+			if (!(Boolean) continueProcess.getValue() || !(Boolean) serviceSuccess.getValue()) {
+				if (errorMessage != null && errorMessage.getValue() != null) {
+					String errorMessageString = errorMessage.getValue().toString();
+					reply.setErrorMessage(errorMessageString);
+				}
+
+				if (warningMessage != null && warningMessage.getValue() != null) {
+					String warningMessageString = warningMessage.getValue().toString();
+					reply.setWarningMessage(warningMessageString);
+				}
+
+				reply.setSuccess(false);
+			} else {
+
+				reply.setSuccessMessage("Student Score Captured Successfully");
+				reply.setSuccess(true);
+			}
+
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			reply.setSuccess(false);
+			reply.setErrorMessage(e.getMessage());
+		}
+
+		return reply;
+
+	}
 
 	@PostMapping("/searchStudent")
 	public StudentReply searchStudent(@RequestBody StudentRequest request) {
