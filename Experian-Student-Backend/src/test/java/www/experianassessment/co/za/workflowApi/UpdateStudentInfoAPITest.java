@@ -35,7 +35,7 @@ public class UpdateStudentInfoAPITest {
 		String cellNumber = "+27815408956";
 		String emailAddress = "info@experianassessment.co.za";
 		String dob = "29/04/1998";
-		String studentNumber = "E55124634A";
+		String studentNumber = "K64369244M";
 		int currentScore = 50;
 
 		StudentRequest studentRequest = new StudentRequest();

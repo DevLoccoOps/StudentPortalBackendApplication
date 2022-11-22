@@ -32,7 +32,7 @@ public class SearchStudentInfoAPITest {
 
 //		 IF
 
-		String studentNumber = "E55124634A";
+		String studentNumber = "M90959955M";
 
 		StudentRequest studentRequest = new StudentRequest();
 		StudentInfo studentInfo = new StudentInfo();

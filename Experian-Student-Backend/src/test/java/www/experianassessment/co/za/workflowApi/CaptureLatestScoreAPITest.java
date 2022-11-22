@@ -31,7 +31,7 @@ public class CaptureLatestScoreAPITest {
 
 //		 IF
 
-		String studentNumber = "E55124634A";
+		String studentNumber = "M90959955M";
 		int currentScore = 50;
 
 		StudentRequest studentRequest = new StudentRequest();
